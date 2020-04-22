@@ -9,7 +9,10 @@ import almaceneskt.conexion.Conexion;
 import java.awt.Color;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -91,6 +94,7 @@ public class MenuAdmin extends javax.swing.JFrame {
         cmbnuevorol = new javax.swing.JComboBox<>();
         jButton5 = new javax.swing.JButton();
         comborol = new javax.swing.JComboBox<>();
+        jLabel13 = new javax.swing.JLabel();
         btnlogout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -419,20 +423,22 @@ public class MenuAdmin extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtusuarioeditar, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtbuscarusuario, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton3)))
+                                .addComponent(jButton3))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel13)
+                                    .addComponent(jLabel3))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtusuarioeditar, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton1)
@@ -444,14 +450,11 @@ public class MenuAdmin extends javax.swing.JFrame {
                                 .addComponent(jLabel5)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(comborol, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 545, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(195, 195, 195)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 545, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING))))
+                        .addGap(179, 179, 179)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -527,6 +530,8 @@ public class MenuAdmin extends javax.swing.JFrame {
                             .addComponent(txtcontraeditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(comborol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel13)
+                        .addGap(9, 9, 9)
                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addContainerGap()
@@ -721,8 +726,14 @@ public class MenuAdmin extends javax.swing.JFrame {
             if (respuesta == 0) {
                 try {
                     st = cn.GetConection().createStatement();
+                    rs=st.executeQuery("select * from usuarios where ID="+txtbuscarusuario.getText());
+                    rs.next();
+                    String tipo = rs.getString(4);
+                    if(tipo.equals("Master")){
+                    JOptionPane.showMessageDialog(null, "El master no puede ser editado","Toy arriba de ti palomo",JOptionPane.ERROR_MESSAGE);
+                    }else{
                     st.executeUpdate("delete from usuarios where ID =" + txtbuscarusuario.getText());
-                    JOptionPane.showMessageDialog(null, "Registro borrado");
+                    JOptionPane.showMessageDialog(null, "Registro borrado");}
                 } catch (Exception e) {
                     System.out.println(e);
 
@@ -775,11 +786,22 @@ public class MenuAdmin extends javax.swing.JFrame {
         if (Tipofinal.equals("Empleado")) {
             JOptionPane.showMessageDialog(null, "Contacte con el Administrador", "Privilegios insuficientes", JOptionPane.ERROR_MESSAGE);
         } else {
+            
             int respuesta = JOptionPane.showConfirmDialog(null, "Estas seguro?", "Agregara este user?", JOptionPane.YES_NO_OPTION);
+            
             String nombre = txtnuevouser.getText();
             String contra = txtnuevacontra.getText();
             String tipo = cmbnuevorol.getSelectedItem().toString();
             if (respuesta == 0) {
+                 JLabel jpass = new JLabel("Contraseña");
+            JTextField pass = new JPasswordField();
+            Object[] objeto = {jpass,pass};
+            String Contra="";
+            int validar = JOptionPane.showConfirmDialog(null, objeto,"Introduzca su contraseña",JOptionPane.OK_CANCEL_OPTION);
+            if(validar==0){
+                Contra=pass.getText(); 
+            }
+            if(Contra.equals(ContraFinal)){
                 Statement st;
                 ResultSet rs;
                 try {
@@ -790,6 +812,9 @@ public class MenuAdmin extends javax.swing.JFrame {
                     System.out.println(e);
                     JOptionPane.showMessageDialog(null, "Usuario Ya existe", "Error", JOptionPane.ERROR_MESSAGE);
                 }
+            }else{
+            JOptionPane.showMessageDialog(null,"Contraseña incorrecta","Error",JOptionPane.ERROR_MESSAGE);
+            }
             }
         }
     }//GEN-LAST:event_jButton5ActionPerformed
@@ -843,14 +868,31 @@ public class MenuAdmin extends javax.swing.JFrame {
         if (Tipofinal.equals("Empleado")) {
             JOptionPane.showMessageDialog(null, "Contacte con el Administrador", "Privilegios insuficientes", JOptionPane.ERROR_MESSAGE);
         } else {
+            JLabel jpass = new JLabel("Contraseña");
+            JTextField pass = new JPasswordField();
+            Object[] objeto = {jpass,pass};
+            String Contra="";
+            int validar = JOptionPane.showConfirmDialog(null, objeto,"Introduzca su contraseña",JOptionPane.OK_CANCEL_OPTION);
+            if(validar==0){
+                Contra=pass.getText(); 
+            }
+            if(Contra.equals(ContraFinal)){
             try{
             Statement st;
+            ResultSet rs;
             st=cn.GetConection().createStatement();
-            st.executeUpdate("");
-            
+            rs=st.executeQuery("select * from usuarios where ID="+txtbuscarusuario.getText());
+            rs.next();
+            if(rs.getString(4).equalsIgnoreCase("Master")){
+             JOptionPane.showMessageDialog(null, "El master no puede ser editado","Toy arriba de ti palomo",JOptionPane.ERROR_MESSAGE);
+            }else{
+            st.executeUpdate("update usuarios set Usuario='"+txtusuarioeditar.getText()+"',Contraseña='"+txtcontraeditar.getText()+"',Tipo_Usuario='"+comborol.getSelectedItem()+"' where ID='"+txtbuscarusuario.getText()+"'");
+            JOptionPane.showMessageDialog(null, "Registro Editado");}
             }catch(Exception e){
-            
-            
+            System.out.println(e);
+            }
+            }else{
+            JOptionPane.showMessageDialog(null,"Contraseña incorrecta","Error",JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -915,6 +957,7 @@ public class MenuAdmin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

@@ -157,6 +157,11 @@ public class Login extends javax.swing.JFrame {
                     a1.setVisible(true);
                     this.hide();
                 }
+                if (rs.getString(4).equals("Master")) {
+                    JOptionPane.showMessageDialog(null, "Bienvenido Maestro "+Usuario);
+                    MenuAdmin a1 = new MenuAdmin();
+                    a1.setVisible(true);
+                    this.hide();}
                 if (rs.getString(4).equals("Empleado")) {
                     MenuAdmin a2 = new MenuAdmin();
                     a2.setVisible(true);
