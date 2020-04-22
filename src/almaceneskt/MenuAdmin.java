@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package almaceneskt;
-
+//gg
 import almaceneskt.conexion.Conexion;
 import java.awt.Color;
 import java.sql.ResultSet;
